@@ -164,6 +164,8 @@ Rectangle{
 
                 onClicked: {
                     deleteDialog.referencingFeatureId = model.referencingFeature.id
+                    deleteDialog.referencingFeatureDisplayMessage = model.displayString
+                    deleteDialog.layerName = relationEditorModel.relation.referencingLayer.name
                     deleteDialog.visible = true
                 }
             }
@@ -185,12 +187,13 @@ Rectangle{
       id: deleteDialog
 
       property int referencingFeatureId
-      property var layerName
+      property string referencingFeatureDisplayMessage
+      property string layerName
 
       visible: false
 
-      title: qsTr( 'Delete feature %1 on layer %2' ).arg(referencingFeatureId).arg(layerName)
-      text: qsTr( 'Should the feature %1 on layer %2').arg(referencingFeatureId).arg( layerName)
+      title: qsTr( '%1 feature %2 (%3) on layer %4' ).arg( nmRelationId ?  'Unlink connection to ' : 'Delete ').arg( referencingFeatureDisplayMessage ).arg(referencingFeatureId).arg(layerName)
+      text: qsTr( 'Should the feature %1 (%2) on layer %3 be %4').arg( referencingFeatureDisplayMessage ).arg(referencingFeatureId).arg( layerName ).arg( nmRelationId ? 'unlinked?' : 'deleted?' )
       standardButtons: StandardButton.Ok | StandardButton.Cancel
       onAccepted: {
         referencingFeatureListView.model.deleteFeature( referencingFeatureId )
